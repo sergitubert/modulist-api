@@ -13,6 +13,6 @@ export class AuthGoogleController {
     @UseGuards(AuthGuard('google'))
     loginCallback(@Req() req: Request, @Res() res: Response) {
         console.log(req.user)
-        res.redirect('http://localhost:3000')
+        res.redirect('http://localhost:3000');
     }
 }
