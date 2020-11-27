@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as csurf from 'csurf';
 import * as session from 'express-session';
 import * as helmet from 'helmet';
 import { AppModule } from './app.module';
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -21,7 +23,8 @@ async function bootstrap() {
     sessionConfig.cookie.secure = true;
   }
   app.use(helmet());
-  app.use(session(sessionConfig))
-  await app.listen(3001);
+  app.use(session(sessionConfig));
+  app.use(csurf());
+  await app.listen(3000);
 }
 bootstrap();

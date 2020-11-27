@@ -30,6 +30,7 @@
     "@types/express-session": "^1.17.3",
     "@types/passport-github2": "^1.2.4",
     "@types/passport-google-oauth20": "^2.0.4",
+    "csurf": "^1.11.0",
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
     "passport": "^0.4.1",
