@@ -1,18 +1,39 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
-
+import { GoogleLoginGuard } from './guards/google-login.guard';
 @Controller('auth/google')
 export class AuthGoogleController {
 
+    private CLIENT_HOME_URL: string;
+
+    constructor(private readonly configService: ConfigService) {
+        this.CLIENT_HOME_URL = this.configService.get('FRONTEND_URL')
+    }
+
     @Get("/")
-    @UseGuards(AuthGuard('google'))
+    @UseGuards(GoogleLoginGuard)
     login() { }
 
     @Get('/callback')
-    @UseGuards(AuthGuard('google'))
+    @UseGuards(GoogleLoginGuard)
     loginCallback(@Req() req: Request, @Res() res: Response) {
+        console.log('Callback!')
         console.log(req.user)
-        res.redirect('http://localhost:3000');
+        res.redirect(this.CLIENT_HOME_URL);
     }
+
+    @Get('/user')
+    user(@Req() req: Request) {
+        return req.user
+    }
+
+    @Get('/logout')
+    logout(@Req() req: Request, @Res() res: Response) {
+        req.logout();
+        req.session.destroy(() => {
+            res.redirect(this.CLIENT_HOME_URL);
+        });
+    }
+
 }
