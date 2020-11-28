@@ -15,6 +15,7 @@ async function bootstrap() {
     resave: false,
     saveUninitialized: false,
     rolling: true,
+    name: 'user',
     cookie: { maxAge: 30 * 60 * 1000 },
   };
 
