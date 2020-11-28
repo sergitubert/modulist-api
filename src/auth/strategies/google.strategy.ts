@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { CreateUserDto } from '../../users/create-user.dto';
 import { UsersService } from '../../users/users.service';
 import { AuthService } from '../auth.service';
 
@@ -19,32 +20,24 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     }
 
     async validate(accessToken: string, refreshToken: string, profile: GoogleProfile, done: VerifyCallback) {
-        // find current user in UserModel
-        // const currentUser = await User.findOne({
-        //     twitterId: profile._json.id_str
-        // });
         const currentUser = await this.authService.validateUser(profile.id);
-        // create new user if the database doesn't have this user
+        console.log(currentUser)
         if (!currentUser) {
-            // const newUser = await new User({
-            //     name: profile._json.name,
-            //     screenName: profile._json.screen_name,
-            //     twitterId: profile._json.id_str,
-            //     profileImageUrl: profile._json.profile_image_url
-            // }).save();
-            const newUser: any = {
-                displayName: profile.displayName,
+            const { value, verified } = profile.emails[0];
+            const newUser: CreateUserDto = {
+                name: profile.name.givenName,
+                surname: profile.name.familyName,
                 googleId: profile.id,
-                photo: profile.photos[0].value,
+                photoUrl: profile.photos[0].value,
+                email: value,
             };
-            const mail = profile.emails[0];
 
-            if (!mail.verified) {
+            if (!verified) {
                 throw new UnauthorizedException('Email not verified')
             }
-            await this.usersService.add(newUser);
-            newUser.email = mail.value;
-            done(null, newUser);
+
+            const user = await this.usersService.create(newUser);
+            done(null, user);
         }
         done(null, currentUser);
     }

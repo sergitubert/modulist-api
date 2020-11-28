@@ -6,7 +6,7 @@ export class AuthService {
     constructor(private readonly userService: UsersService) { }
 
     async validateUser(id: string) {
-        const user = this.userService.findOne(id);
+        const user = this.userService.findOne({ googleId: id });
         if (!user) throw new UnauthorizedException();
         return user;
     }

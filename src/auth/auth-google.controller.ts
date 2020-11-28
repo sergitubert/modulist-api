@@ -18,8 +18,6 @@ export class AuthGoogleController {
     @Get('/callback')
     @UseGuards(GoogleLoginGuard)
     loginCallback(@Req() req: Request, @Res() res: Response) {
-        console.log('Callback!')
-        console.log(req.user)
         res.redirect(this.CLIENT_HOME_URL);
     }
 
