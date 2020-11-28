@@ -7,9 +7,9 @@ export class GithubStrategy extends Strategy {
 
     constructor(private readonly configService: ConfigService) {
         super({
-            callbackURL: 'http://localhost:3001/auth/github/callback',
-            clientID: '0f980a4b7ab841231330',
-            clientSecret: '0f980a4b7ab841231330',
+            clientID: configService.get('GITHUB_CLIENT_ID'),
+            clientSecret: configService.get('GITHUB_CLIENT_SECRET'),
+            callbackURL: `${configService.get('BACKEND_URL')}/auth/github/callback`,
             scope: ['']
         }, async (accessToken, refreshToken, profile, done) => {
             try {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { UsersService } from '../../users/users.service';
@@ -6,14 +7,13 @@ import { AuthService } from '../auth.service';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
-    constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {
+    constructor(private readonly configService: ConfigService, private readonly authService: AuthService, private readonly usersService: UsersService) {
         super({
-            clientID: '136798218844-6qnll3qavb9him4347fm8qu1s9ovopfn.apps.googleusercontent.com',
-            clientSecret: 'Vc5ZCF5tqAzdAjzLgKKSptkU',
-            callbackURL: 'http://localhost:3001/auth/google/callback',
+            clientID: configService.get('GOOGLE_CLIENT_ID'),
+            clientSecret: configService.get('GOOGLE_CLIENT_SECRET'),
+            callbackURL: `${configService.get('BACKEND_URL')}/auth/google/callback`,
             scope: ['profile'],
-
-        })
+        });
     }
 
     async validate(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
