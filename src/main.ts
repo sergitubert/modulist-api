@@ -9,14 +9,18 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.enableCors({
+    credentials: true
+  });
+
   // TODO: SET STORE IN REDIS
   const sessionConfig: session.SessionOptions = {
     secret: 'my-secret',
     resave: false,
     saveUninitialized: false,
     rolling: true,
-    name: 'user',
-    cookie: { maxAge: 30 * 60 * 1000 },
+    name: 'ml:session',
+    cookie: { maxAge: 30 * 60 * 1000, sameSite: false },
   };
 
   if (process.env.NODE_ENV === "production") {
@@ -26,12 +30,11 @@ async function bootstrap() {
   }
 
   app.use(helmet());
-
   app.use(session(sessionConfig));
   app.use(passport.initialize());
   app.use(passport.session());
 
   app.use(csurf());
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

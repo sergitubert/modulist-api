@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Req, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { GoogleLoginGuard } from './guards/google-login.guard';
@@ -18,11 +18,14 @@ export class AuthGoogleController {
     @Get('/callback')
     @UseGuards(GoogleLoginGuard)
     loginCallback(@Req() req: Request, @Res() res: Response) {
+        res.cookie('userID', req.user["_id"], { httpOnly: false, signed: false })
         res.redirect(this.CLIENT_HOME_URL);
     }
 
     @Get('/user')
     user(@Req() req: Request) {
+        console.log(req.user)
+        if (!req.user) throw new NotFoundException();
         return req.user
     }
 
