@@ -33,6 +33,7 @@
     "@types/mongoose": "^5.10.1",
     "@types/passport-github2": "^1.2.4",
     "@types/passport-google-oauth20": "^2.0.4",
+    "@types/uuid": "^8.3.0",
     "csurf": "^1.11.0",
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
@@ -42,7 +43,8 @@
     "passport-google-oauth20": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.1",

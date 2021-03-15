@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './identity/auth.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -10,11 +9,17 @@ import { UsersModule } from './users/users.module';
             isGlobal: true,
             envFilePath: ['env/.env']
         }),
-        MongooseModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) => ({ uri: configService.get('MONGODB_URL') })
-        }),
+        // MongooseModule.forRootAsync({
+        //     imports: [ConfigModule],
+        //     inject: [ConfigService],
+        //     useFactory: (configService: ConfigService) => ({ uri: configService.get('MONGODB_URL') })
+        // }),
+        // MongooseModule.forFeature([
+        //     {
+        //         name: User.name,
+        //         schema: UserSchema
+        //     },
+        // ]),
         AuthModule,
         UsersModule
     ],
