@@ -14,6 +14,15 @@ import { GoogleStrategy } from './strategies/google.strategy';
   ],
   controllers: [AuthGoogleController],
   providers: [
-    SessionSerializer, GoogleStrategy, GithubStrategy, UserCreator, UserFinder, { provide: 'UserRepository', useClass: InMemoryUserRepository, }]
+    SessionSerializer,
+    GoogleStrategy,
+    GithubStrategy,
+    UserCreator,
+    UserFinder,
+    {
+      provide: 'UserRepository',
+      useClass: InMemoryUserRepository,
+    },
+  ]
 })
 export class AuthModule { }
