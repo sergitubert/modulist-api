@@ -10,12 +10,10 @@ import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
-    // UsersModule,
     PassportModule.register({ session: true })
   ],
   controllers: [AuthGoogleController],
   providers: [
-    // AuthService,
     SessionSerializer, GoogleStrategy, GithubStrategy, UserCreator, UserFinder, { provide: 'UserRepository', useClass: InMemoryUserRepository, }]
 })
 export class AuthModule { }
